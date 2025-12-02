@@ -2,6 +2,7 @@ import pygame
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 running = True
+
 #------------------------------------------------------------------------------------------------------------------------
 #                   VARIABLE
 #------------------------------------------------------------------------------------------------------------------------
@@ -10,13 +11,15 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 rouge = (255, 0, 0)
 bleu = (0, 0, 255)
+
 #--- Pygame ---
 clock = pygame.time.Clock()     #Horloge pour limiteus ips (pas touche Nath)
 font = pygame.font.SysFont("Arial", 18)
+
 #--- Texte ---
 TourX = font.render("A vous de jouer ! Joueurs X ", True, black)
-Tour0 =  font.render("A vous de jouer ! Joueurs O ", True, black)
-Victoire0 =  font.render("Le joueurs O à gagné !", True, black)
+TourO =  font.render("A vous de jouer ! Joueurs O ", True, black)
+VictoireO =  font.render("Le joueurs O à gagné !", True, black)
 VictoireX =  font.render("Le joueurs X à gagné !", True, black)
 
 #--- Valeurs grille ----
@@ -25,8 +28,11 @@ plateau = [
     [None, None, None], 
     [None, None, None]   
 ]
+
 #--- Tours du joueurs --- 
+gagnant = None
 Tour = "X"   #pensé a le modifier avec un random pour que ça soit pas toujours le meme signe qui commence
+
 #------------------------------------------------------------------------------------------------------------------------
 #                   FONCTION
 #------------------------------------------------------------------------------------------------------------------------
@@ -45,37 +51,52 @@ def Grille_jeux():
     pygame.draw.line(screen, black, (415, 585), (865, 585), 5)
 
 def pion():
-        for i in range(3):
-            for j in range(3):
-                if plateau[i][j] == "X":
-                    pygame.draw.line(screen, rouge, (430 + j * 150, 150 + i * 150), (550 + j * 150, 270 + i * 150), 5)
-                    pygame.draw.line(screen, rouge, (550 + j * 150, 150 + i * 150), (430 + j * 150, 270 + i * 150), 5)
-                elif plateau[i][j] == "O":
-                    pygame.draw.circle(screen, bleu, (490 + j * 150, 210 + i * 150), 60, 5)
-
-    
-def vainqueur():
     for i in range(3):
-        if plateau[i][0] == plateau[i][1] == plateau[1][2] and plateau[i][0] is not None:
-            continue
+        for j in range(3):
+            if plateau[i][j] == "X":
+                pygame.draw.line(screen, rouge, (430 + j * 150, 150 + i * 150), (550 + j * 150, 270 + i * 150), 5)
+                pygame.draw.line(screen, rouge, (550 + j * 150, 150 + i * 150), (430 + j * 150, 270 + i * 150), 5)
+            elif plateau[i][j] == "O":
+                pygame.draw.circle(screen, bleu, (490 + j * 150, 210 + i * 150), 60, 5)
+
+def verifier_gagnant():
+    for i in range(3):
+        if plateau[i][0] == plateau[i][1] == plateau[i][2] and plateau[i][0] is not None:
+            return plateau[i][0]
+    for i in range(3):
         if plateau[0][i] == plateau[1][i] == plateau[2][i] and plateau[0][i] is not None:
-            continue
-        if plateau[0][0] == plateau[1][1] == plateau[2][2]and plateau[0][0] is not None:
-            continue
-        if plateau[0][2] == plateau[1][1] == plateau[2][0]and plateau[2][0] is not None:
-            continue 
+            return plateau[0][i]
+    if plateau[0][0] == plateau[1][1] == plateau[2][2] and plateau[0][0] is not None:
+        return plateau[0][0]
+    if plateau[0][2] == plateau[1][1] == plateau[2][0] and plateau[0][2] is not None:
+        return plateau[0][2]
+    return None
+
+def Ecriture():
+        global gagnant
+        gagnant = verifier_gagnant()
+        if gagnant == "X":
+            screen.blit(VictoireX, (500, 50))
+        elif gagnant == "O":
+            screen.blit(VictoireO, (500, 50))
+        else:
+            if Tour == "X":
+                screen.blit(TourX, (500, 50))
+            else:
+                screen.blit(TourO, (500, 50))
+
 #------------------------------------------------------------------------------------------------------------------------
 #                   LANCEMENT
 #------------------------------------------------------------------------------------------------------------------------
 
-
 while running:
     screen.fill(white)
-    screen.blit(TourX, (500, 50))
+    Ecriture()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        
+        if event.type == pygame.MOUSEBUTTONDOWN and gagnant is None:
             if event.button == 1:
                 (x, y) = pygame.mouse.get_pos()
                 if x > 415 and x < 865 and y > 135 and y < 585:
@@ -87,12 +108,10 @@ while running:
                             Tour = "O"
                         else:
                             Tour = "X"
-                print(plateau)
     pion()
     Grille_jeux()
 
     pygame.display.flip()
-
     clock.tick(15) 
 
 pygame.quit()
