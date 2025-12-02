@@ -116,7 +116,7 @@ while running:
                             Tour = "O"
                         else:
                             Tour = "X"
-    pion()
+    pion() 
     Grille_jeux()
 
     pygame.display.flip()
