@@ -44,7 +44,10 @@ def Grille_jeux():
 
 
 while running:
+<<<<<<< HEAD
     screen.fill(white)
+=======
+>>>>>>> 7d74e8b93fce12357597c15b9745eb428cc051b6
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -61,6 +64,7 @@ while running:
                         else:
                             Tour = "X"
                 print(grille_data)
+<<<<<<< HEAD
     for i in range(3):
         for j in range(3):
             if grille_data[i][j] == "X":
@@ -69,6 +73,11 @@ while running:
             elif grille_data[i][j] == "O":
                 pygame.draw.circle(screen, bleu, (490 + j * 150, 210 + i * 150), 60, 5)
 
+=======
+
+
+    screen.fill(white)
+>>>>>>> 7d74e8b93fce12357597c15b9745eb428cc051b6
     Grille_jeux()
 
     pygame.display.flip()
