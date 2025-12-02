@@ -1,0 +1,23 @@
+visualisation : 
+	-On veut un juex fonctionnel
+	-Une possibilité de joué avec un ou deux joueurs
+	-Différents choix de "couleur"
+	-compter les points -> attribution dan sun /data de point avec un pseudo ? // renitialisation après chaque session ?? 
+	-Plusieurs difficulté d'IA
+	
+
+
+Option :  
+	-Modes de jeux diversifié du tic tac toe -> plus que 9 cases (20*20)
+	-Leaderboard ?  
+	-3/4 joueurs ?? 
+
+
+
+
+
+CODE :  -> On a besoin de verifié a quel joueurs c'est le tour
+	->Si y a encore des cases vides pour savoir si la partie est finis 
+	-> savoir si y a une configuration gagnante
+	-> Draw les lignes
+	-> tours du joueurs
