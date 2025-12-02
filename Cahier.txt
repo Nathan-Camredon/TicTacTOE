@@ -16,8 +16,10 @@ Option :
 
 
 
-CODE :  -> On a besoin de verifié a quel joueurs c'est le tour
+CODE :  -> On a besoin de verifié a quel joueurs c'est le tour check
 	->Si y a encore des cases vides pour savoir si la partie est finis 
-	-> savoir si y a une configuration gagnante
-	-> Draw les lignes
-	-> tours du joueurs
+	-> savoir si y a une configuration gagnante check
+	-> Draw les lignes check
+	-> tours du joueurs check
+	-> algo opti
+	-> algo random 
