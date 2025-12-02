@@ -14,13 +14,14 @@ bleu = (0, 0, 255)
 
 #--- Pygame ---
 clock = pygame.time.Clock()     #Horloge pour limiteus ips (pas touche Nath)
-font = pygame.font.SysFont("Arial", 18)
+font = pygame.font.SysFont("Arial", 30)
 
 #--- Texte ---
 TourX = font.render("A vous de jouer ! Joueurs X ", True, black)
 TourO =  font.render("A vous de jouer ! Joueurs O ", True, black)
 VictoireO =  font.render("Le joueurs O à gagné !", True, black)
 VictoireX =  font.render("Le joueurs X à gagné !", True, black)
+Nul = font.render("Match nul !!", True, black)
 
 #--- Valeurs grille ----
 plateau = [
@@ -60,16 +61,22 @@ def pion():
                 pygame.draw.circle(screen, bleu, (490 + j * 150, 210 + i * 150), 60, 5)
 
 def verifier_gagnant():
+    n = 0
     for i in range(3):
+        for j in range(3):
+            if plateau[i][j] != None:
+                n += 1
         if plateau[i][0] == plateau[i][1] == plateau[i][2] and plateau[i][0] is not None:
             return plateau[i][0]
-    for i in range(3):
         if plateau[0][i] == plateau[1][i] == plateau[2][i] and plateau[0][i] is not None:
             return plateau[0][i]
     if plateau[0][0] == plateau[1][1] == plateau[2][2] and plateau[0][0] is not None:
         return plateau[0][0]
     if plateau[0][2] == plateau[1][1] == plateau[2][0] and plateau[0][2] is not None:
-        return plateau[0][2]
+        return plateau[0][2]        
+    if n == 9: 
+        return "nul" 
+
     return None
 
 def Ecriture():
@@ -79,6 +86,8 @@ def Ecriture():
             screen.blit(VictoireX, (500, 50))
         elif gagnant == "O":
             screen.blit(VictoireO, (500, 50))
+        elif gagnant == "nul":
+            screen.blit(Nul, (500,50))
         else:
             if Tour == "X":
                 screen.blit(TourX, (500, 50))
@@ -95,7 +104,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        
         if event.type == pygame.MOUSEBUTTONDOWN and gagnant is None:
             if event.button == 1:
                 (x, y) = pygame.mouse.get_pos()
@@ -112,6 +120,6 @@ while running:
     Grille_jeux()
 
     pygame.display.flip()
-    clock.tick(15) 
+    clock.tick(5) 
 
 pygame.quit()
