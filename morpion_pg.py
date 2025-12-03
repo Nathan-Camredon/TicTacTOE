@@ -28,9 +28,8 @@ VictoireX = font.render("Le joueur X a gagne !", True, noir)
 Nul = font.render("Match nul !!", True, noir)
 
 #--- Texte Boutons  ---
-font_bouton = pygame.font.SysFont("Arial", 20)
-txt_quitter = font_bouton.render("Quitter", True, blanc)
-txt_reset = font_bouton.render("Reset", True, blanc)
+txt_quitter = font.render("Quitter", True, blanc)
+txt_reset = font.render("Reset", True, blanc)
 
 #--- Valeurs grille ----
 plateau = [
@@ -99,7 +98,7 @@ def Grille_jeux():
     screen.blit(txt_quitter, (1050, 610))
     screen.blit(txt_reset, (160, 610)) 
     
-    txt_ia = font_bouton.render(f"Mode IA: {mode_ia}", True, noir)
+    txt_ia = font.render(f"Mode IA: {mode_ia}", True, noir)
     screen.blit(txt_ia, (580, 610)) # Ajusté pour centrer
 
 def pion():
