@@ -2,13 +2,13 @@ import pygame
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 running = True
-
+import random
 #------------------------------------------------------------------------------------------------------------------------
 #                   VARIABLE
 #------------------------------------------------------------------------------------------------------------------------
 #--- couleur ---
-black = (0, 0, 0)
-white = (255, 255, 255)
+noir = (0, 0, 0)
+blanc = (255, 255, 255)
 rouge = (255, 0, 0)
 bleu = (0, 0, 255)
 
@@ -17,11 +17,11 @@ clock = pygame.time.Clock()     #Horloge pour limiteus ips (pas touche Nath)
 font = pygame.font.SysFont("Arial", 30)
 
 #--- Texte ---
-TourX = font.render("A vous de jouer ! Joueurs X ", True, black)
-TourO =  font.render("A vous de jouer ! Joueurs O ", True, black)
-VictoireO =  font.render("Le joueurs O à gagné !", True, black)
-VictoireX =  font.render("Le joueurs X à gagné !", True, black)
-Nul = font.render("Match nul !!", True, black)
+TourX = font.render("A vous de jouer ! Joueurs X ", True, noir)
+TourO =  font.render("A vous de jouer ! Joueurs O ", True, noir)
+VictoireO =  font.render("Le joueurs O à gagné !", True, noir)
+VictoireX =  font.render("Le joueurs X à gagné !", True, noir)
+Nul = font.render("Match nul !!", True, noir)
 
 #--- Valeurs grille ----
 plateau = [
@@ -32,24 +32,29 @@ plateau = [
 
 #--- Tours du joueurs --- 
 gagnant = None
-Tour = "X"   #pensé a le modifier avec un random pour que ça soit pas toujours le meme signe qui commence
-
+Tour = random.choice(["X", "O"])
 #------------------------------------------------------------------------------------------------------------------------
 #                   FONCTION
 #------------------------------------------------------------------------------------------------------------------------
+def ordinateur1(board, signe):
+    i = random.choice([1, 2, 3])
+    j = random.choice([1, 2, 3])
 
+    while board[i][j] != None:
+        board[i][j] = signe
+    
 def Grille_jeux():
     # --- Lignes Verticales ---
-    pygame.draw.line(screen, black, (415, 135), (415, 585), 5)
-    pygame.draw.line(screen, black, (565, 135), (565, 585), 5)
-    pygame.draw.line(screen, black, (715, 135), (715, 585), 5)
-    pygame.draw.line(screen, black, (865, 135), (865, 585), 5)
+    pygame.draw.line(screen, noir, (415, 135), (415, 585), 5)
+    pygame.draw.line(screen, noir, (565, 135), (565, 585), 5)
+    pygame.draw.line(screen, noir, (715, 135), (715, 585), 5)
+    pygame.draw.line(screen, noir, (865, 135), (865, 585), 5)
 
     # --- Lignes Horizontales ---
-    pygame.draw.line(screen, black, (415, 135), (865, 135), 5)
-    pygame.draw.line(screen, black, (415, 285), (865, 285), 5)
-    pygame.draw.line(screen, black, (415, 435), (865, 435), 5)
-    pygame.draw.line(screen, black, (415, 585), (865, 585), 5)
+    pygame.draw.line(screen, noir, (415, 135), (865, 135), 5)
+    pygame.draw.line(screen, noir, (415, 285), (865, 285), 5)
+    pygame.draw.line(screen, noir, (415, 435), (865, 435), 5)
+    pygame.draw.line(screen, noir, (415, 585), (865, 585), 5)
 
 def pion():
     for i in range(3):
@@ -99,7 +104,7 @@ def Ecriture():
 #------------------------------------------------------------------------------------------------------------------------
 
 while running:
-    screen.fill(white)
+    screen.fill(blanc)
     Ecriture()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
