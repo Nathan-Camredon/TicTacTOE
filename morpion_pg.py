@@ -53,7 +53,7 @@ rect_ia = pygame.Rect(540, 600, 200, 50)
 #                   FONCTION
 #------------------------------------------------------------------------------------------------------------------------
 
-def ordinateur1(board, signe):
+def ordinateur_random(board, signe):
     i = random.choice([0, 1, 2]) 
     j = random.choice([0, 1, 2])
 
@@ -61,6 +61,18 @@ def ordinateur1(board, signe):
         i = random.choice([0, 1, 2])
         j = random.choice([0, 1, 2])
     board[i][j] = signe
+
+def ordinateur(board, signe):
+    if signe == "X":
+        a = "O"
+    if signe == "O":
+        a = "X"
+    if board[1][1] == None:
+        board[1][1] = signe
+        return
+    for i in range (3):
+        n = 0
+        
 
 def Grille_jeux():
     # --- Lignes Verticales ---
