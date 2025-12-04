@@ -45,10 +45,22 @@ mode_ia = False
 rect_quitter = pygame.Rect(1000, 600, 200, 50)
 rect_reset = pygame.Rect(100, 600, 200, 50)
 rect_ia = pygame.Rect(540, 600, 200, 50)
-
+#--- AI valeur --- 
+Ai_jeu = ""
 #------------------------------------------------------------------------------------------------------------------------
 #                   FONCTION
 #------------------------------------------------------------------------------------------------------------------------
+def ordinateur(board, signe):
+    if signe == "X":
+        a = "O"
+    if signe == "O":
+        a = "X"
+    if board[1][1] == None: 
+        return 5 
+    
+                
+
+
 
 def ordinateur_random(board, signe):
     i = random.choice([0, 1, 2]) 
@@ -60,15 +72,51 @@ def ordinateur_random(board, signe):
     board[i][j] = signe
 
 def ordinateur(board, signe):
-    if signe == "X":
-        a = "O"
-    if signe == "O":
-        a = "X"
-    if board[1][1] == None:
-        board[1][1] = signe
-        return
-    for i in range (3):
-        n = 0
+    """
+    Action de l'ia par priorité de chose a faire
+    renvoie une valeur entre 0 et 8
+    faiblesse de l'ia sur les coups sur les diagonales (peut pas win contre ça)
+    """
+    adversaire = "O" if signe == "X" else "X"
+
+    # --- Gagner ---
+    for index in range(9):
+        l = index // 3
+        c = index % 3
+        if board[l][c] is None:
+            board[l][c] = signe
+            if verifier_gagnant() == signe:
+                board[l][c] = None 
+                return index       
+            board[l][c] = None     
+
+    # --- Bloquer ---
+    for index in range(9):
+        l = index // 3
+        c = index % 3
+        if board[l][c] is None:
+            board[l][c] = adversaire
+            if verifier_gagnant() == adversaire:
+                board[l][c] = None
+                return index      
+            board[l][c] = None
+
+    # --- Centre ---
+    if board[1][1] is None:
+        return 4
+
+    # --- hasard ---
+    cases_vides = []
+    for index in range(9):
+        l = index // 3
+        c = index % 3
+        if board[l][c] is None:
+            cases_vides.append(index)
+    
+    if len(cases_vides) > 0:
+        return random.choice(cases_vides)
+    
+    return None    
 
 def Grille_jeux():
     # --- Lignes Verticales ---
@@ -160,7 +208,7 @@ def Ecriture():
 
 def reset(): 
     """
-    Parametre d'usine du jeu
+    Parametre d'usine
     """
     global plateau, Tour, gagnant 
     plateau = [
@@ -171,14 +219,34 @@ def reset():
     Tour = random.choice(["X", "O"])
     gagnant = None
 
+def gestion_clics_boutons(x, y):
+    global running, mode_ia 
+    if rect_quitter.collidepoint(x, y):
+        running = False
+    elif rect_reset.collidepoint(x, y):
+        reset()
+    elif rect_ia.collidepoint(x, y):
+        mode_ia = not mode_ia
+        reset()
 #------------------------------------------------------------------------------------------------------------------------
 #                   LANCEMENT
 #------------------------------------------------------------------------------------------------------------------------
 
 while running:
     screen.fill(blanc)
-    
-    # --- Action joueurs ---
+        
+    if mode_ia and gagnant is None and Tour == "O":
+        pygame.time.delay(200) 
+        
+        coup_ia = ordinateur(plateau, "O")
+        
+        if coup_ia is not None:
+            ligne_ia = coup_ia // 3
+            col_ia = coup_ia % 3
+            
+            plateau[ligne_ia][col_ia] = "O"
+            Tour = "X"
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -187,22 +255,20 @@ while running:
             if event.button == 1:
                 (x, y) = pygame.mouse.get_pos()
                 
-                if rect_quitter.collidepoint(x, y):
-                    running = False
-                
-                elif rect_reset.collidepoint(x, y):
-                    reset()
-                
-                elif rect_ia.collidepoint(x, y):
-                    mode_ia = not mode_ia
-                elif gagnant is None:  #Tant que pas de gagnant on laisse de nouveua élement rentrer 
+                # --- GESTION DES BOUTONS ---
+                gestion_clics_boutons(x, y)
+
+                # --- CLIC SUR LA GRILLE ---
+                joueur_peut_jouer = (not mode_ia) or (mode_ia and Tour == "X")
+
+                if running and gagnant is None and joueur_peut_jouer:
                     if x > 415 and x < 865 and y > 135 and y < 585:
+                        
                         colonne = (x - 415) // 150
                         ligne = (y - 135) // 150
                         
                         if plateau[ligne][colonne] == None:
                             plateau[ligne][colonne] = Tour 
-                            # Changement de tour
                             if Tour == "X":
                                 Tour = "O"
                             else:
