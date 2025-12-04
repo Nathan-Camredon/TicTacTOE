@@ -49,20 +49,12 @@ rect_ia = pygame.Rect(540, 600, 200, 50)
 Ai_jeu = ""
 #------------------------------------------------------------------------------------------------------------------------
 #                   FONCTION
-#------------------------------------------------------------------------------------------------------------------------
-def ordinateur(board, signe):
-    if signe == "X":
-        a = "O"
-    if signe == "O":
-        a = "X"
-    if board[1][1] == None: 
-        return 5 
-    
-                
-
-
+#------------------------------------------------------------------------------------------------------------------------                
 
 def ordinateur_random(board, signe):
+    """
+    Fonction dite "ia" random, permet d'empecher les erreurs
+    """
     i = random.choice([0, 1, 2]) 
     j = random.choice([0, 1, 2])
 
@@ -85,7 +77,7 @@ def ordinateur(board, signe):
         c = index % 3
         if board[l][c] is None:
             board[l][c] = signe
-            if verifier_gagnant() == signe:
+            if verifier_gagnant() == signe:  #On verifie si l'ia peut gagner en un coup
                 board[l][c] = None 
                 return index       
             board[l][c] = None     
@@ -96,14 +88,26 @@ def ordinateur(board, signe):
         c = index % 3
         if board[l][c] is None:
             board[l][c] = adversaire
-            if verifier_gagnant() == adversaire:
+            if verifier_gagnant() == adversaire: #on verifie si l'adversaire peut gagner
                 board[l][c] = None
                 return index      
             board[l][c] = None
 
     # --- Centre ---
     if board[1][1] is None:
-        return 4
+        return 4            #la case du millieu est la plus importante à prendre
+
+    # --- LES ANGLES  ---
+    angles = [0, 2, 6, 8]  #valeurs des coins
+    angles_dispos = [] 
+    
+    for index in angles:
+        l = index // 3
+        c = index % 3
+        if board[l][c] is None:
+            angles_dispos.append(index)
+    if len(angles_dispos) > 0:
+        return random.choice(angles_dispos)
 
     # --- hasard ---
     cases_vides = []
