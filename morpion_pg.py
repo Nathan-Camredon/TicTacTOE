@@ -26,8 +26,6 @@ TourO = font.render("A vous de jouer ! Joueur O ", True, noir)
 VictoireO = font.render("Le joueur O a gagne !", True, noir)
 VictoireX = font.render("Le joueur X a gagne !", True, noir)
 Nul = font.render("Match nul !!", True, noir)
-
-#--- Texte Boutons  ---
 txt_quitter = font.render("Quitter", True, blanc)
 txt_reset = font.render("Reset", True, blanc)
 
@@ -71,7 +69,6 @@ def ordinateur(board, signe):
         return
     for i in range (3):
         n = 0
-        
 
 def Grille_jeux():
     # --- Lignes Verticales ---
@@ -102,6 +99,9 @@ def Grille_jeux():
     screen.blit(txt_ia, (580, 610)) # Ajusté pour centrer
 
 def pion():
+    """
+    Fais apparaitre des formes X et O en fonction de cmment ils sont remplis dans le tableau
+    """
     for i in range(3):
         for j in range(3):
             if plateau[i][j] == "X":
@@ -111,6 +111,9 @@ def pion():
                 pygame.draw.circle(screen, bleu, (490 + j * 150, 210 + i * 150), 60, 5)
 
 def verifier_gagnant():
+    """
+    Verifie si il y a une combinaison gagnante
+    """
     n = 0
     for i in range(3):
         for j in range(3):
@@ -136,6 +139,10 @@ def verifier_gagnant():
     return None
 
 def Ecriture():
+    """
+    Commande ecriture qui permet de faire apparaitre tout les textes sur l'état de la partie
+        Elle modifie la valeur gagnant en l'appellant en global (sinon le jeu marche)
+    """
     global gagnant 
     gagnant = verifier_gagnant()
     
@@ -152,6 +159,9 @@ def Ecriture():
             screen.blit(TourO, (500, 50))
 
 def reset(): 
+    """
+    Parametre d'usine du jeu
+    """
     global plateau, Tour, gagnant 
     plateau = [
         [None, None, None],  
@@ -168,7 +178,7 @@ def reset():
 while running:
     screen.fill(blanc)
     
-    # 1. Gestion des événements
+    # --- Action joueurs ---
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -177,7 +187,6 @@ while running:
             if event.button == 1:
                 (x, y) = pygame.mouse.get_pos()
                 
-                # ---  ---
                 if rect_quitter.collidepoint(x, y):
                     running = False
                 
@@ -186,7 +195,7 @@ while running:
                 
                 elif rect_ia.collidepoint(x, y):
                     mode_ia = not mode_ia
-                elif gagnant is None:
+                elif gagnant is None:  #Tant que pas de gagnant on laisse de nouveua élement rentrer 
                     if x > 415 and x < 865 and y > 135 and y < 585:
                         colonne = (x - 415) // 150
                         ligne = (y - 135) // 150
